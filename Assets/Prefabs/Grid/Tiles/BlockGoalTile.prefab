@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &8294749798618884671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2297776011863625465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac2322d5ea99434dbc41398f692a24c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionMask:
+    serializedVersion: 2
+    m_Bits: 1024
+--- !u!1001 &1996159384807246655
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 310923719397868998, guid: 293dda27db8554206a0f30dd7abbb136,
+        type: 3}
+      propertyPath: m_Name
+      value: BlockGoalTile
+      objectReference: {fileID: 0}
+    - target: {fileID: 310923719397869001, guid: 293dda27db8554206a0f30dd7abbb136,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310923719397869001, guid: 293dda27db8554206a0f30dd7abbb136,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310923719397869001, guid: 293dda27db8554206a0f30dd7abbb136,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 310923719397869001, guid: 293dda27db8554206a0f30dd7abbb136,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 330447616833023035, guid: 293dda27db8554206a0f30dd7abbb136,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 79b57380b65e940d5aa1a1f26b41ec55, type: 2}
+    m_RemovedComponents:
+    - {fileID: 310923719397869000, guid: 293dda27db8554206a0f30dd7abbb136, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 293dda27db8554206a0f30dd7abbb136, type: 3}
+--- !u!1 &2297776011863625465 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 310923719397868998, guid: 293dda27db8554206a0f30dd7abbb136,
+    type: 3}
+  m_PrefabInstance: {fileID: 1996159384807246655}
+  m_PrefabAsset: {fileID: 0}

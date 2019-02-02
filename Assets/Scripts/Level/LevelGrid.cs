@@ -16,7 +16,7 @@ namespace Level
         public Row rowPrefab;
         public Tile.Tile defaultTilePrefab;
         public PlayerGoalTile playerGoalTilePrefab;
-        
+        public BlockGoalTile blockGoalTilePrefab;
         
         private List<Row> _rows;
 
@@ -47,6 +47,9 @@ namespace Level
             {
                 case TileType.PlayerGoal:
                     tilePrefab = playerGoalTilePrefab;
+                    break;
+                case TileType.BlockGoal:
+                    tilePrefab = blockGoalTilePrefab;
                     break;
             }
             
@@ -103,6 +106,8 @@ namespace Level
         {
             Clear();
 
+//            TileType[,] tiles = RotateMatrix(levelData.tiles, 2);
+
             for (int y = 0; y < levelData.tiles.GetLength(1); y++)
             {
                 if (_rows.ElementAtOrDefault(y) == null)
@@ -118,6 +123,18 @@ namespace Level
                     _rows[y].AddTile(CreateTile(new Vector2Int(x, y), _rows[y].transform, type));
                 }
             }
+        }
+        
+        static TileType[,] RotateMatrix(TileType[,] matrix, int n) {
+            TileType[,] ret = new TileType[n, n];
+
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < n; ++j) {
+                    ret[i, j] = matrix[j, i];
+                }
+            }
+
+            return ret;
         }
     }
 }

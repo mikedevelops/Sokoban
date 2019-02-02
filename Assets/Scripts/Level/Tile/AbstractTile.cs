@@ -4,11 +4,10 @@ namespace Level.Tile
 {
     public abstract class AbstractTile: MonoBehaviour
     {
-        public TileType type;
         protected readonly Vector3 Offset = new Vector3(0, -0.25f, 0);
         
         private Vector2Int _cartesianPosition;
-        
+
         public Vector2Int GetCartesianPosition()
         {
             return _cartesianPosition;
@@ -25,10 +24,7 @@ namespace Level.Tile
             transform.position = new Vector3(offsetPosition.x, offsetPosition.y, offsetPosition.z);
         }
 
-        public TileType GetTileType()
-        {
-            return type;
-        }
+        public abstract TileType GetTileType();
         
         private  Vector3 GetOffset()
         {

@@ -4,11 +4,15 @@ namespace Level.Tile
     {
         None,
         Default,
-        PlayerGoal
+        PlayerGoal,
+        BlockGoal
     }
     
     public class Tile: AbstractTile
     {
-        
+        public override TileType GetTileType()
+        {
+            return TileType.Default;
+        }
     }
 }
