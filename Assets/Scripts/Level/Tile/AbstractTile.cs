@@ -10,7 +10,7 @@ namespace Level.Tile
 
         public Vector2Int GetCartesianPosition()
         {
-            return _cartesianPosition;
+            return new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z));
         }
         
         public void SetCartesianPosition(Vector2Int position)

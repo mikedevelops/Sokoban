@@ -8,8 +8,7 @@
     allows initial states to be selected from the editor
     
 # Level
-- Flip level to match editor scriptable objects
-- Add ability to add entities to tiles in editor
+- Restart
 
 # Player
 √ Can move
@@ -25,14 +24,16 @@
 
 # Player Goal
 √ Cannot move
+- Inactive state
 - Next level 
 
 # Entity Goal
-- Cannot move
+√ Cannot move
 
 # Instructions
 √ A movement instruction should be dispatched from a service and consumed by a manager
     this should decouple movement from an input source, therefore NPC entities can be
     moved using computed instructions, whereas the player will be moved by instructions
     derived from input 
+
 

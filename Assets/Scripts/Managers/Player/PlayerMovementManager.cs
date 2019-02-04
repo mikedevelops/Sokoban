@@ -31,7 +31,7 @@ namespace Managers.Player
         [Button]
         public void Teleport(Vector2Int position)
         {
-            Vector3 offsetPosition = new Vector3(position.x, 0, position.y) + _offset;
+            Vector3 offsetPosition = new Vector3(position.x, 0, position.y) + GetOffset();
             transform.position = offsetPosition;
         }
 

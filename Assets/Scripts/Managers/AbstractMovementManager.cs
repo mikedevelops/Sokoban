@@ -28,11 +28,11 @@ namespace Managers
             return grid.GetTile(target) != null;
         }
 
-        private Vector2Int GetCartesianPosition()
+        public Vector2Int GetCartesianPosition()
         {
             Vector3 position = transform.position;
             
-            return new Vector2Int((int)position.x, (int)position.z);
+            return new Vector2Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.z));
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Service
         public LayerMask interactionMask;
 
         private void OnCollisionEnter(Collision other)
-        {
+        {           
             bool interaction = interactionMask == (interactionMask | (1 << other.gameObject.layer));
 
             if (!interaction)

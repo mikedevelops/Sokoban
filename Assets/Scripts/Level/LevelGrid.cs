@@ -1,24 +1,37 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Agents;
 using JetBrains.Annotations;
 using Level.Tile;
+using Managers;
+using Managers.Block;
+using Managers.Player;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level
 {
+    public enum EntityType
+    {
+        Player,
+        Block
+    }
+    
     public class LevelGrid: MonoBehaviour
     {
-        [Space] public LevelData level;
+        [Space] 
+        public LevelData level;
         
         [Space]
-        public Row rowPrefab;
         public Tile.Tile defaultTilePrefab;
         public PlayerGoalTile playerGoalTilePrefab;
         public BlockGoalTile blockGoalTilePrefab;
-        
-        private List<Row> _rows;
+        public PlayerMovementManager playerPrefab;
+        public BlockMovementManager blockPrefab;
+
+        private List<AbstractTile> _tiles;
+        private string _test;
 
         private void Awake()
         {
@@ -29,112 +42,104 @@ namespace Level
         public void Generate()
         {
             GenerateLevelFromData(level);
-        }
-
-        private Row CreateRow(int position)
-        {
-            Row row = Instantiate(rowPrefab, transform);
-            row.SetPosition(position);
-
-            return row;
-        }
-
-        private AbstractTile CreateTile(Vector2Int position, Transform row, TileType type)
-        {
-            AbstractTile tilePrefab = defaultTilePrefab;
-
-            switch (type)
-            {
-                case TileType.PlayerGoal:
-                    tilePrefab = playerGoalTilePrefab;
-                    break;
-                case TileType.BlockGoal:
-                    tilePrefab = blockGoalTilePrefab;
-                    break;
-            }
-            
-            AbstractTile tile = Instantiate(tilePrefab, row);
-            tile.SetCartesianPosition(position);
-            tile.SetWorldPosition(position);
-            
-            return tile;
+            _test = "done!";
         }
 
         [Button]
         public void Clear()
         {
-            if (transform.childCount > 0)
-            {
-                for (int c = 0; c < transform.childCount; c++)
-                {
-                    DestroyImmediate(transform.GetChild(c).gameObject);
-                }
-            }
+			List<Transform> children = transform.Cast<Transform>().ToList();
+
+            foreach(Transform child in children)
+				DestroyImmediate(child.gameObject);
             
-            _rows = new List<Row>(0);
+            _tiles = new List<AbstractTile>(0);
         }
 
         [CanBeNull]
         public AbstractTile GetTile(Vector2Int position)
         {
-            try
-            {
-                return _rows[position.y].GetTile(position.x);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogWarning(exception);
-                
-                return null;
-            }
+            return _tiles.Find(tile => tile.GetCartesianPosition() == position);
         }
 
         public AbstractTile[] GetTiles()
         {
-            List<AbstractTile> collection = new List<AbstractTile>(0);
-
-            foreach (Row gridRow in _rows)
-            {
-                collection.AddRange(gridRow.GetTiles());
-            }
-
-            return collection.ToArray();
+            return _tiles.ToArray();
         }
 
         [Button]
         public void GenerateLevelFromData(LevelData levelData)
         {
-            Clear();
-
-//            TileType[,] tiles = RotateMatrix(levelData.tiles, 2);
-
-            for (int y = 0; y < levelData.tiles.GetLength(1); y++)
+            if (levelData == null)
             {
-                if (_rows.ElementAtOrDefault(y) == null)
-                    _rows.Add(CreateRow(y));
+                Debug.LogError("Add a level file to the inspector");
+                return;
+            }
+            
+            Clear();
+            
+            levelData.tiles?.ForEach(serializedTile =>
+            {
+                TileType tileType = (TileType) serializedTile[0];
 
-                for (int x = 0; x < levelData.tiles.GetLength(0); x++)
+                switch (tileType)
                 {
-                    TileType type = levelData.tiles[x, y];
-                    
-                    if (type == TileType.None)
-                        continue;
-                    
-                    _rows[y].AddTile(CreateTile(new Vector2Int(x, y), _rows[y].transform, type));
+                    case TileType.None:
+                        break;
+                    case TileType.Default:
+                        CreateTile(defaultTilePrefab, new Vector2Int(serializedTile[1], serializedTile[2]));                       
+                        break;
+                    case TileType.PlayerGoal:
+                        CreateTile(playerGoalTilePrefab, new Vector2Int(serializedTile[1], serializedTile[2]));
+                        break;
+                    case TileType.BlockGoal:
+                        CreateTile(blockGoalTilePrefab, new Vector2Int(serializedTile[1], serializedTile[2]));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-            }
+            });
+            
+            levelData.entities?.ForEach(serializedEntity =>
+            {
+                EntityType entityType = (EntityType) serializedEntity[0];
+
+                switch (entityType)
+                {
+                    case EntityType.Player:
+                        CreateEntity(playerPrefab, new Vector2Int(serializedEntity[1], serializedEntity[2]));
+                        break;
+                    case EntityType.Block:
+                        CreateEntity(blockPrefab, new Vector2Int(serializedEntity[1], serializedEntity[2]));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            });
         }
-        
-        static TileType[,] RotateMatrix(TileType[,] matrix, int n) {
-            TileType[,] ret = new TileType[n, n];
 
-            for (int i = 0; i < n; ++i) {
-                for (int j = 0; j < n; ++j) {
-                    ret[i, j] = matrix[j, i];
-                }
+        private void CreateTile(AbstractTile prefab, Vector2Int position)
+        {
+            AbstractTile tile = Instantiate(prefab, transform);
+            tile.SetWorldPosition(position);
+            _tiles.Add(tile);
+        }
+
+        private void CreateEntity(AbstractMovementManager prefab, Vector2Int position)
+        {
+            AbstractMovementManager entity = Instantiate(prefab, transform);
+            IEntityWithOffset entityWithOffset = entity as IEntityWithOffset;
+
+            entity.grid = this;
+            
+            if (entityWithOffset != null)
+            {
+                entityWithOffset.SetPosition(new Vector3(position.x, 0, position.y));
+                
+                return;
             }
 
-            return ret;
+            entity.transform.position = new Vector3(position.x, 0, position.y);
         }
     }
 }
