@@ -4,18 +4,13 @@ namespace Level.Tile
 {
     public abstract class AbstractTile: MonoBehaviour
     {
+        public LayerMask entityWhiteList;
         protected readonly Vector3 Offset = new Vector3(0, -0.25f, 0);
-        
-        private Vector2Int _cartesianPosition;
 
         public Vector2Int GetCartesianPosition()
         {
-            return new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.z));
-        }
-        
-        public void SetCartesianPosition(Vector2Int position)
-        {
-            _cartesianPosition = position;
+            Vector3 position = transform.position;
+            return new Vector2Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.z));
         }
         
         public void SetWorldPosition(Vector2Int position)

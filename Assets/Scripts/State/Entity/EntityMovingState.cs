@@ -33,7 +33,7 @@ namespace State.Entity
             SetEntityPosition(stateManager, GetNewPosition(stateManager));
             
             if (HasArrived(_targetPosition, stateManager))
-            {
+            {               
                 SetEntityPosition(stateManager, _targetPosition);
                 
                 if (stateManager is PlayerMovementManager)
@@ -41,6 +41,9 @@ namespace State.Entity
 
                 if (stateManager is BlockMovementManager)
                     return new BlockIdleState((BlockMovementManager) stateManager);
+                
+                if (stateManager is SheepMovementManager)
+                    return new SheepIdleState((SheepMovementManager) stateManager);
                 
                 return new IdleState();
             }

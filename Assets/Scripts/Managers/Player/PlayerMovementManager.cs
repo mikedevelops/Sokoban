@@ -1,6 +1,7 @@
 using System;
 using Agents;
 using Instructions;
+using JetBrains.Annotations;
 using Service;
 using Sirenix.OdinInspector;
 using State;
@@ -46,27 +47,37 @@ namespace Managers.Player
             transform.position = offsetPosition;
         }
 
-        public override bool IsValidMove(MovementInstruction instruction)
+        public override bool IsValidMove(MovementInstruction instruction, int? playerLayer = null)
         {           
             if (!base.IsValidMove(instruction))
                 return false;
 
-            if (WillPushEntity(instruction))
-            {
-                MovementInstruction pushedEntityDirection = new MovementInstruction(instruction.Direction * 2);  
-                
-                return base.IsValidMove(pushedEntityDirection);
-            }
-                
+            AbstractMovementManager entityToPush = GetEntityToPush(instruction);
+
+            if (entityToPush == null)
+                return true;
+
+            // Determine where the pushed entity will land
+            MovementInstruction pushedEntityDirection = new MovementInstruction(instruction.Direction * 2);  
             
-            return true;
+            // Validate the position the pushed entity will land
+            return base.IsValidMove(pushedEntityDirection, entityToPush.gameObject.layer);
         }
 
-        private bool WillPushEntity(MovementInstruction instruction)
+        [CanBeNull]
+        private AbstractMovementManager GetEntityToPush(MovementInstruction instruction)
         {
             Vector3 instructionDirection = new Vector3(instruction.Direction.x, GetOffset().y, instruction.Direction.y);
+            RaycastHit entity;
             
-            return Physics.Raycast(transform.position, instructionDirection, 1f, interactionMask);
+            Physics.Raycast(transform.position, instructionDirection, out entity, 1f, interactionMask);
+            
+            if (entity.collider == null)
+                return null;
+
+            AbstractMovementManager entityMovementManager = entity.collider.GetComponent<AbstractMovementManager>();
+
+            return entityMovementManager;
         }
     }
 }

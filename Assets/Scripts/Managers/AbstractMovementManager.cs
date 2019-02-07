@@ -1,7 +1,9 @@
 using Instructions;
 using Level;
+using Level.Tile;
 using State.Entity;
 using UnityEngine;
+using Utils;
 
 namespace Managers
 {
@@ -9,7 +11,7 @@ namespace Managers
     {
         public float speed;
         public float snapDistance = 0.025f;
-        public LevelGrid grid;
+        public global::Level.Level grid;
         
         public float GetSpeed()
         {
@@ -21,11 +23,19 @@ namespace Managers
             return snapDistance;
         }
 
-        public virtual bool IsValidMove(MovementInstruction instruction)
+        public virtual bool IsValidMove(MovementInstruction instruction, int? entityLayer = null)
         {
             Vector2Int target = GetCartesianPosition() + instruction.Direction;
+            AbstractTile tile = grid.GetTile(target);
             
-            return grid.GetTile(target) != null;
+            int layer = entityLayer ?? gameObject.layer;
+
+            if (tile == null)
+                return false;
+            
+            Debug.Log(tile.transform.position);
+
+            return LayerUtils.IsLayer(layer, tile.entityWhiteList);
         }
 
         public Vector2Int GetCartesianPosition()

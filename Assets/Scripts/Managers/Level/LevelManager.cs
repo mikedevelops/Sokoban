@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Level;
 using Level.Tile;
 using Sirenix.Utilities;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace Managers.Level
     public class LevelManager: MonoBehaviour
     {
         public static LevelManager Instance;
-        public LevelGrid grid;
+        public global::Level.Level level;
 
         private List<IFulfillableTile> _fulfillableTiles;
 
@@ -28,7 +27,7 @@ namespace Managers.Level
 
         private void GetFulfillableEntities()
         {
-            AbstractTile[] tiles = grid.GetTiles();
+            AbstractTile[] tiles = level.GetTiles();
             List<IFulfillableTile> fulfillableTiles = new List<IFulfillableTile>(0);
 
             foreach (AbstractTile tile in tiles)

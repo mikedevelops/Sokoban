@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2322d5ea99434dbc41398f692a24c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityWhiteList:
+    serializedVersion: 2
+    m_Bits: 3584
   interactionMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
 --- !u!1001 &1996159384807246655
 PrefabInstance:
   m_ObjectHideFlags: 0

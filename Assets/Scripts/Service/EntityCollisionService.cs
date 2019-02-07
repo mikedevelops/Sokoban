@@ -1,4 +1,5 @@
 using UnityEngine;
+using Utils;
 
 namespace Service
 {
@@ -9,8 +10,8 @@ namespace Service
         public LayerMask interactionMask;
 
         private void OnCollisionEnter(Collision other)
-        {           
-            bool interaction = interactionMask == (interactionMask | (1 << other.gameObject.layer));
+        {
+            bool interaction = LayerUtils.IsLayer(other.gameObject.layer, interactionMask);
 
             if (!interaction)
                 return;

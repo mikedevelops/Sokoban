@@ -5,7 +5,8 @@ namespace Level.Tile
         None,
         Default,
         PlayerGoal,
-        BlockGoal
+        BlockGoal,
+        BlockWall
     }
     
     public class Tile: AbstractTile

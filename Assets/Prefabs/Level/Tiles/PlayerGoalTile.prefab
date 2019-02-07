@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21933f7e2c9645b9a4ddf4ad12794f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  entityWhiteList:
+    serializedVersion: 2
+    m_Bits: 1536
   interactionMask:
     serializedVersion: 2
     m_Bits: 512
@@ -26,7 +28,7 @@ PrefabInstance:
     - target: {fileID: 310923719397868998, guid: 293dda27db8554206a0f30dd7abbb136,
         type: 3}
       propertyPath: m_Name
-      value: PlayerGoalTile Variant
+      value: PlayerGoalTile
       objectReference: {fileID: 0}
     - target: {fileID: 310923719397869000, guid: 293dda27db8554206a0f30dd7abbb136,
         type: 3}

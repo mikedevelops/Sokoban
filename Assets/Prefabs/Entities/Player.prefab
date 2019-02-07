@@ -100,7 +100,7 @@ MonoBehaviour:
   initialState: 0
   interactionMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
 --- !u!114 &5938361664813061983
 MonoBehaviour:
   m_ObjectHideFlags: 0

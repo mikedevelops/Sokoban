@@ -24,7 +24,7 @@ namespace Level.Tile
         {            
             bool active = LevelManager.Instance.IsTileActive(this);
             
-            gameObject.SetActive(active);
+//            gameObject.SetActive(active);
             _active = active;
         }
     }

@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Agents;
 using JetBrains.Annotations;
 using Level.Tile;
 using Managers;
-using Managers.Block;
-using Managers.Player;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -15,20 +12,18 @@ namespace Level
     public enum EntityType
     {
         Player,
-        Block
+        Block,
+        Sheep
     }
     
-    public class LevelGrid: MonoBehaviour
+    public class Level: SerializedMonoBehaviour
     {
         [Space] 
         public LevelData level;
-        
-        [Space]
-        public Tile.Tile defaultTilePrefab;
-        public PlayerGoalTile playerGoalTilePrefab;
-        public BlockGoalTile blockGoalTilePrefab;
-        public PlayerMovementManager playerPrefab;
-        public BlockMovementManager blockPrefab;
+
+        [Space] 
+        public Dictionary<TileType, AbstractTile> tilePrefabs;
+        public Dictionary<EntityType, AbstractMovementManager> entityPrefabs;
 
         private List<AbstractTile> _tiles;
         private string _test;
@@ -42,7 +37,6 @@ namespace Level
         public void Generate()
         {
             GenerateLevelFromData(level);
-            _test = "done!";
         }
 
         [Button]
@@ -81,40 +75,20 @@ namespace Level
             levelData.tiles?.ForEach(serializedTile =>
             {
                 TileType tileType = (TileType) serializedTile[0];
+                Vector2Int position = new Vector2Int(serializedTile[1], serializedTile[2]);
 
-                switch (tileType)
-                {
-                    case TileType.None:
-                        break;
-                    case TileType.Default:
-                        CreateTile(defaultTilePrefab, new Vector2Int(serializedTile[1], serializedTile[2]));                       
-                        break;
-                    case TileType.PlayerGoal:
-                        CreateTile(playerGoalTilePrefab, new Vector2Int(serializedTile[1], serializedTile[2]));
-                        break;
-                    case TileType.BlockGoal:
-                        CreateTile(blockGoalTilePrefab, new Vector2Int(serializedTile[1], serializedTile[2]));
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                if (tileType == TileType.None)
+                    return;
+                
+                CreateTile(tilePrefabs[tileType], position);
             });
             
             levelData.entities?.ForEach(serializedEntity =>
             {
                 EntityType entityType = (EntityType) serializedEntity[0];
+                Vector2Int position = new Vector2Int(serializedEntity[1], serializedEntity[2]);
 
-                switch (entityType)
-                {
-                    case EntityType.Player:
-                        CreateEntity(playerPrefab, new Vector2Int(serializedEntity[1], serializedEntity[2]));
-                        break;
-                    case EntityType.Block:
-                        CreateEntity(blockPrefab, new Vector2Int(serializedEntity[1], serializedEntity[2]));
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                CreateEntity(entityPrefabs[entityType], position);
             });
         }
 
